@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商城后台</title>
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="layout/top"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+            <!-- Page Sidebar -->
+            <div class="page-sidebar" id="sidebar">
+                <!-- Page Sidebar Header-->
+                <div class="sidebar-header-wrapper">
+                    <input class="searchinput" type="text">
+                    <i class="searchicon fa fa-search"></i>
+                    <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+                </div>
+                <!-- /Page Sidebar Header -->
+                <!-- Sidebar Menu -->
+                {include file="layout/left"}
+                <!-- /Sidebar Menu -->
+            </div>
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{:url('/admin/index')}">系统</a>
+                        </li>
+                        <li>
+                            <a href="{:url('brand/index')}">品牌管理</a>
+                        </li>
+                        <li class="active">添加品牌</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-blue">
+                <span class="widget-caption">新增品牌</span>
+            </div>
+            <div class="widget-body">
+                <div id="horizontal-form">
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">品牌名称</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="brand_name" required="" type="text">
+                            </div>
+                            <p class="help-block col-sm-4 red">* 必填</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">品牌地址</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="全地址" name="brand_url" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">品牌Logo</label>
+                            <div class="col-sm-6">
+                                <input type="file" name="brand_img">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">品牌描述</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" name="brand_desc"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">品牌状态</label>
+                            <div class="col-sm-6">
+                                <div class="control-group">
+                                    <div class="radio" style="float: left">
+                                        <label>
+                                            <input name="brand_status" type="radio" checked="checked" class="colored-blue" value="1">
+                                            <span class="text">显示 </span>
+                                        </label>
+                                    </div>
+                                    <div class="radio" style="float:left;margin-left: 10px">
+                                        <label>
+                                            <input name="brand_status" type="radio" class="colored-blue" value="0">
+                                            <span class="text">隐藏</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-bordered">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-info" style="color: white">保存信息</button>
+                                <a href="javascript:;" onclick="window.history.go(-1)" class="btn btn-default" style="margin-left: 5px">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <script src="__ADMIN__/style/jquery.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    
+
+
+</body></html>
