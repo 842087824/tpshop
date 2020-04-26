@@ -130,6 +130,24 @@ class Brand extends Controller
 
     //排序
     public function listOrder(){
+        //标志位
+        $flag = false;
+        if (is_array($data = input('post.'))){
+            foreach ($data as $key => $v){
+                $re = db('brand')->where('id',$key)->update(['brand_sort'=>$v]);
+                if ($re  != 0){
+                    $flag = true;
+                }
+            }
+        }
+
+
+        //判断
+        if ($flag){
+            $this->success('排序成功','index');
+        }else{
+            $this->success('排序失败');
+        }
 
     }
 }

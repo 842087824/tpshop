@@ -30,7 +30,7 @@
                 <div class="sidebar-header-wrapper">
                     <input class="searchinput" type="text">
                     <i class="searchicon fa fa-search"></i>
-                    <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+                    <div class="searchhelper">搜索信息</div>
                 </div>
                 <!-- /Page Sidebar Header -->
                 <!-- Sidebar Menu -->
@@ -47,9 +47,9 @@
                             <a href="{:url('/admin/index')}">系统</a>
                         </li>
                         <li>
-                            <a href="{:url('brand/index')}">品牌管理</a>
+                            <a href="{:url('cate/index')}">栏目管理</a>
                         </li>
-                        <li class="active">添加品牌</li>
+                        <li class="active">添加栏目</li>
                     </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -61,55 +61,62 @@
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-blue">
-                <span class="widget-caption">新增品牌</span>
+                <span class="widget-caption">新增栏目</span>
             </div>
             <div class="widget-body">
                 <div id="horizontal-form">
                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">品牌名称</label>
+                            <label class="col-sm-2 control-label no-padding-right">上级分类</label>
+                            <div class="col-sm-6" >
+                                <select class="form-control" name="pid">
+                                    <option value="0">定义分类</option>
+                                    {volist name="cateList" id="cate"}
+                                        <option value="{$cate.id}">{$cate.cate_name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">栏目名称</label>
                             <div class="col-sm-6">
-                                <input class="form-control" placeholder="" name="brand_name" required="" type="text">
+                                <input class="form-control" placeholder="" name="cate_name" required="" type="text">
                             </div>
                             <p class="help-block col-sm-4 red">* 必填</p>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">品牌地址</label>
-                            <div class="col-sm-6">
-                                <input class="form-control" placeholder="全地址" name="brand_url" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">品牌Logo</label>
-                            <div class="col-sm-6">
-                                <input type="file" name="brand_img">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">品牌描述</label>
-                            <div class="col-sm-6">
-                                <textarea class="form-control" name="brand_desc"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">品牌状态</label>
+                            <label class="col-sm-2 control-label no-padding-right">显示到导航</label>
                             <div class="col-sm-6">
                                 <div class="control-group">
                                     <div class="radio" style="float: left">
                                         <label>
-                                            <input name="brand_status" type="radio" checked="checked" class="colored-blue" value="1">
-                                            <span class="text">显示 </span>
+                                            <input name="show_nav" type="radio" class="colored-blue" value="1">
+                                            <span class="text">是 </span>
                                         </label>
                                     </div>
                                     <div class="radio" style="float:left;margin-left: 10px">
                                         <label>
-                                            <input name="brand_status" type="radio" class="colored-blue" value="0">
-                                            <span class="text">隐藏</span>
+                                            <input name="show_nav" type="radio" class="colored-blue" checked="checked"  value="0">
+                                            <span class="text">否</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">关键词</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="keywords" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">描述</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" name="cate_desc"></textarea>
+                            </div>
+                        </div>
+
 
                         <div class="form-group form-bordered">
                             <div class="col-sm-offset-2 col-sm-10">

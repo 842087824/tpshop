@@ -67,7 +67,7 @@
                         <li>
                             <a href="{:url('/admin/index')}">系统</a>
                         </li>
-                        <li class="active">品牌管理</li>
+                        <li class="active">栏目管理</li>
                     </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -87,49 +87,54 @@
                     <table class="table table-bordered table-hover">
                         <thead class="">
                             <tr>
-                                <th class="text-center">排序</th>
-                                <th class="text-center">ID</th>
-                                <th class="text-center">品牌名</th>
-                                <th class="text-center">品牌地址</th>
-                                <th class="text-center">品牌LOGO</th>
-                                <th class="text-center" width="30%">品牌描述</th>
-                                <th class="text-center">品牌状态</th>
-                                <th class="text-center">操作</th>
+                                <th class="text-center" width="5%">排序</th>
+                                <th class="text-center" width="6%">ID</th>
+                                <th class="text-center">分类名称</th>
+                                <th class="text-center" width="10%">分类类型</th>
+                                <th class="text-center" width="10%">显示到导航栏</th>
+                                <th class="text-center" width="14%">操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {volist name="brandData" id="brandData"}
+                            {volist name="cateData" id="cate"}
                             <tr>
                                 <td align="center">
-                                    <input type="text" style="width: 50px;text-align: center;" name="sort[{$brandData.id}]" value="{$brandData.brand_sort}">
+                                    <input type="text" style="width: 50px;text-align: center;" name="" value="{$cate.cate_sort}">
                                 </td>
-                                <td align="center">{$brandData.id}</td>
-                                <td align="center">{$brandData.brand_name}</td>
-                                <td align="center"><a href="{$brandData.brand_url}"  target="_blank">{$brandData.brand_url}</a></td>
+                                <td align="center">{$cate.id}</td>
+                                <td> <?php echo str_repeat('|----',$cate['level']);?>{$cate.cate_name}</td>
                                 <td align="center">
-                                    {if condition="$brandData.brand_img == ''"}
-                                        暂无图片
-                                    {else/}
-                                        <img src="__UPLOADS__/{$brandData.brand_img}" style="height: 30px;">
-                                    {/if}
-
+                                    {if condition="$cate.cate_type == 1"} 系统分类 {/if}
+                                    {if condition="$cate.cate_type == 2"} 帮助分类 {/if}
+                                    {if condition="$cate.cate_type == 3"} 网店帮助 {/if}
+                                    {if condition="$cate.cate_type == 4"} 网店信息 {/if}
+                                    {if condition="$cate.cate_type == 5"} 普通分类 {/if}
                                 </td>
-                                <td align="center">{$brandData.brand_desc | subtext=20}</td>
                                 <td align="center">
-                                    {if condition="$brandData.brand_status == 1"}
+                                    {if condition="$cate.show_nav == 1"}
                                         <span class="show">显示</span>
                                     {else/}
-                                         <!--<span class="notshow">隐藏</span>-->
                                         <span class="noshow">隐藏</span>
                                     {/if}
                                 </td>
                                 <td align="center">
-                                    <a href="{:url('brand/edit',['id'=>$brandData.id])}" class="btn btn-primary btn-sm shiny">
+                                    <a href="{:url('brand/edit',['id'=>11])}" class="btn btn-primary btn-sm shiny">
                                         <i class="fa fa-edit"></i> 编辑
                                     </a>
-                                    <a href="#" onclick="deleteItem({$brandData.id})" class="btn btn-danger btn-sm shiny">
-                                        <i class="fa fa-trash-o"></i> 删除
-                                    </a>
+
+                                    {in	name="$cate.id"	value="1,2,3"}
+                                        <!-- 内置对象 不让删除 -->
+                                        <a href="#" onclick="deleteItem(111)" class="btn btn-danger btn-sm shiny" disabled="disabled">
+                                            <i class="fa fa-trash-o"></i> 删除
+                                        </a>
+                                    {else/}
+                                        <!-- 可以删除-->
+                                        <a href="#" onclick="deleteItem(111)" class="btn btn-danger btn-sm shiny">
+                                            <i class="fa fa-trash-o"></i> 删除
+                                        </a>
+                                    {/in}
+
+
                                 </td>
                             </tr>
                             {/volist}
@@ -138,7 +143,7 @@
                 <div style="margin-top: 10px;height: 30px">
                     <input type="submit" class="btn btn-blue" style="float: left" value="排序" onclick="listOrder()"></input>
                     <!-- 排序按钮 -->
-                    <div style="float: right">{$page}</div>
+
                 </div>
             </div>
         </div>
@@ -175,7 +180,7 @@
                     //请求的媒体类型
                     contentType: "json",
                     //请求地址
-                    url : "{:url('brand/delete')}",
+                    url : "{:url('cate/delete')}",
                     //数据，json字符串
                     data : {'id':id},
                     //请求成功

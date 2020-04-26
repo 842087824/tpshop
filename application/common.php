@@ -44,3 +44,4 @@ function subtext($text, $length){
     }
     return $text;
 }
+
