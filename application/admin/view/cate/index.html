@@ -129,12 +129,10 @@
                                         </a>
                                     {else/}
                                         <!-- 可以删除-->
-                                        <a href="#" onclick="deleteItem(111)" class="btn btn-danger btn-sm shiny">
+                                        <a href="#" onclick="deleteItem({$cate.id})" class="btn btn-danger btn-sm shiny">
                                             <i class="fa fa-trash-o"></i> 删除
                                         </a>
                                     {/in}
-
-
                                 </td>
                             </tr>
                             {/volist}
@@ -205,12 +203,6 @@
             });
         }
 
-
-        /* 排序 */
-        function listOrder() {
-
-        }
-        
     </script>
 
 

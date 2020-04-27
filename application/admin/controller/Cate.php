@@ -114,24 +114,25 @@ class Cate extends Controller
 
     //删除信息
     public function delete($id){
-        $data = Array();
-        //第一步：查询数据并显示出来
-        $brandItem = db('brand')
-            ->where('id','=',$id)
-            ->find();
 
-        //第二步：删除旧图片
-        if ($brandItem['brand_img'] != ''){
-            //第二步：拼接真实的图片路径
-            $imgRealPath = UPLOADS_IMG.'/'.$brandItem['brand_img'];
-            if (file_exists($imgRealPath)){
-                @unlink($imgRealPath);
-            }
+        //第一步：创建当前数据表
+        $cate = db('cate');
+
+        //第二步：获取当前id数据表的子栏目id
+        $cateTree = new Catetree();
+        $sonids = $cateTree->childrenids($id,$cate);
+        $sonids[] = intval($id);//添加子元素id和父元素id
+//        var_dump($sonids);die;
+
+        //不让删除内置分类
+        $arr1 = [1,2,3];  //内置分类id 不让删除
+        if (array_intersect($arr1,$sonids)){ //求两个数组的交集
+            $this->error('系统内置分类不允许删除');
         }
+
+
         //第三步：删除数据
-        $re = db('brand')
-            ->where('id','=',$id)
-            ->delete();
+        $re = $cate->delete($sonids);
         if ($re){
             $data = ['status'=>1,'message'=>'删除成功'];
         }else{
