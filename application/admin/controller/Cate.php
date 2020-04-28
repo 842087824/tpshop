@@ -16,8 +16,18 @@ class Cate extends Controller
            ->order('cate_sort','desc')
            ->select();
 
+        $cate = new Catetree();
+       //排序处理
+        if (request()->isPost()){
+            $data = input('post.');
+            //对子类和父类排序
+            $cate->cateSort($data['sort'],db('cate'));
+            //判断给与提示
+            $this->success('排序成功','index');
+
+        }
+
        //转化数据为无线级分类
-       $cate = new Catetree();
        $cateTree = $cate->catetree($cateData);
 
        //再次赋值给cateData
@@ -72,7 +82,11 @@ class Cate extends Controller
             }
         }
 
-        $cateList = db('cate')->select();
+        $cateList = db('cate')->order('cate_sort','desc')->select();
+        //进行排序
+        $cate = new Catetree();
+        $cateList = $cate->catetree($cateList);
+
         $this->assign([
            'cateList'=>$cateList
         ]);
@@ -96,7 +110,14 @@ class Cate extends Controller
 //                $this->error($validate->getError());
 //            }
 
-            $re = db('brand')->update($data);
+            //判断是否可以添加子栏目
+            //1.系统不让添加子栏目 id = 1
+            //2.网店信息不让添加子栏目 id = 3
+            if (in_array($data['pid'],['1','3'])){
+                $this->error('系统分类不可以作为上级栏目');
+            }
+
+            $re = db('cate')->update($data);
             if ($re){
                 $this->success('修改成功','index');
             }else{
@@ -105,9 +126,13 @@ class Cate extends Controller
         }
 
 
-
+        $cateList = db('cate')->order('cate_sort','desc')->select();
+        //进行排序
+        $cate = new Catetree();
+        $cateList = $cate->catetree($cateList);
         $this->assign([
-            'cateItem'=>$cateItem
+            'cateItem'=>$cateItem,
+            'cateList'=>$cateList
         ]);
         return view('edit');
     }
@@ -144,8 +169,4 @@ class Cate extends Controller
     }
 
 
-    //排序
-    public function listOrder(){
-
-    }
 }
