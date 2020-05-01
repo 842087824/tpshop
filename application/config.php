@@ -145,7 +145,9 @@ return [
     // 视图输出字符串内容替换
     'view_replace_str'       => [
         '__ADMIN__'=>'/static/admin', //  /代表根目录
-        '__UPLOADS__'=>'/uploads'
+        '__UPLOADS__'=>'/uploads',  //图片上传
+        '__PLUS__'=>'/static/plus'
+
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',

@@ -14,7 +14,9 @@
 //定义上传图片的全局变量
 define("UPLOADS_IMG",ROOT_PATH . 'public' . DS . 'uploads');
 
-//上传图片公共函数
+/*
+ * 上传图片公共函数
+ */
 function upload($fileRequestName){
     //	获取表单上传文件	例如上传了001.jpg
     $file	=	request()->file($fileRequestName);
@@ -37,7 +39,9 @@ function upload($fileRequestName){
 }
 
 
-//字符串截取并且超出显示省略号
+/*
+ * 字符串截取并且超出显示省略号
+ */
 function subtext($text, $length){
     if(mb_strlen($text, 'utf8') > $length){
         return mb_substr($text,0,$length,'utf8').'…';

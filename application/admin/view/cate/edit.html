@@ -74,15 +74,15 @@
                                     <option value="0">顶级分类</option>
                                     {volist name="cateList" id="cate"}
                                         <!-- 选中下拉框 -->
-                                        {if condition="$cateItem.pid eq $cate.id"}
-                                            <option value="{$cate.id}" selected="selected"  {if condition="$cate['cate_type'] neq 5"} disabled="disabled" {/if}>
-                                                <?php echo str_repeat('|----',$cate['level']);?>{$cate.cate_name}
-                                            </option>
-                                        {else /}
-                                            <option value="{$cate.id}"  {if condition="$cate['cate_type'] neq 5"} disabled="disabled" {/if}>
-                                                <?php echo str_repeat('|----',$cate['level']);?>{$cate.cate_name}
-                                            </option>
-                                        {/if}
+                                        <option value="{$cate.id}"
+                                                {if condition="($cateItem.cate_type eq 1) OR ($cateItem.cate_type eq 2) OR ($cateItem.cate_type eq 3) OR ($cateItem.cate_type eq 4)"}
+                                                    disabled="disabled"
+                                                {/if}
+                                                {if condition="$cate.cate_type neq 5"}  disabled="disabled" {/if}
+                                                {if condition="$cate.id eq $cateItem.pid"}  disabled="disabled" {/if}
+                                                {if condition="$cateItem.pid eq $cate.id"}  selected="selected" {/if}   >
+                                        <?php echo str_repeat('|----',$cate['level']);?>{$cate.cate_name}
+                                        </option>
                                     {/volist}
                                 </select>
                             </div>

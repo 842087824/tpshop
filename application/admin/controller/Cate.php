@@ -66,12 +66,11 @@ class Cate extends Controller
                 $this->error('此分类不可以作为上级分类');
             }
 
-
             //*****进行数据验证*******
-//            $validate = validate('Brand');
-//            if(!$validate->check($data)){
-//                $this->error($validate->getError());
-//            }
+            $validate = validate('Cate');
+            if(!$validate->check($data)){
+                $this->error($validate->getError());
+            }
 
             //添加数据
             $re = db('cate')->insert($data);
@@ -105,10 +104,10 @@ class Cate extends Controller
             $data = input('post.');
 
             //*****进行数据验证*******
-//            $validate = validate('Brand');
-//            if(!$validate->check($data)){
-//                $this->error($validate->getError());
-//            }
+            $validate = validate('Cate');
+            if(!$validate->check($data)){
+                $this->error($validate->getError());
+            }
 
             //判断是否可以添加子栏目
             //1.系统不让添加子栏目 id = 1
