@@ -13,10 +13,15 @@ class article extends Controller
 
     //列表显示
     public function index(){
-       $articleData = db('article')->select();
-       $this->assign([
-           'articleData'=>$articleData
-       ]);
+
+        $articleData = db('article')->select();
+        //传递cate
+        $cateData = db('cate')->select();
+        $this->assign([
+            'cateData'=>$cateData,
+            'articleData'=>$articleData
+        ]);
+
        return view('index');
     }
 
@@ -76,17 +81,17 @@ class article extends Controller
             }
 
             //修改图片时，删除图片
-            if ($_FILES['article_img']['tmp_name']){
+            if ($_FILES['thumb']['tmp_name']){
                 //第一步：判断之前数据库是否上传过文件
-                if ($articleItem['article_img'] != ''){
+                if ($articleItem['thumb'] != ''){
                     //第二步：拼接真实的图片路径
-                    $imgRealPath = UPLOADS_IMG.'/'.$articleItem['article_img'];
+                    $imgRealPath = UPLOADS_IMG.'/'.$articleItem['thumb'];
                     if (file_exists($imgRealPath)){
                         @unlink($imgRealPath);
                     }
                 }
                 //获取路径填充
-                $data['article_img'] = upload('article_img');
+                $data['thumb'] = upload('thumb');
             }
 
             $re = db('article')->update($data);
@@ -98,10 +103,15 @@ class article extends Controller
         }
 
 
-
+        //传递cate
+        $cateData = db('cate')->select();
+        $cateTree = new Catetree();
+        $cateData = $cateTree->catetree($cateData);
         $this->assign([
+            'cateData'=>$cateData,
             'articleItem'=>$articleItem
         ]);
+
         return view('edit');
     }
 
@@ -114,9 +124,9 @@ class article extends Controller
             ->find();
 
         //第二步：删除旧图片
-        if ($articleItem['article_img'] != ''){
+        if ($articleItem['thumb'] != ''){
             //第二步：拼接真实的图片路径
-            $imgRealPath = UPLOADS_IMG.'/'.$articleItem['article_img'];
+            $imgRealPath = UPLOADS_IMG.'/'.$articleItem['thumb'];
             if (file_exists($imgRealPath)){
                 @unlink($imgRealPath);
             }

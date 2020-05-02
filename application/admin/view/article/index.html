@@ -89,9 +89,9 @@
                         <thead class="">
                             <tr>
                                 <th class="text-center">ID</th>
-                                <th class="text-center" width="30%">标题</th>
+                                <th class="text-center" width="20%">标题</th>
                                 <th class="text-center">缩略图</th>
-                                <th class="text-center">所属栏目</th>
+                                <th class="text-center" width="10%">所属栏目</th>
                                 <th class="text-center">跳转</th>
                                 <th class="text-center">置顶</th>
                                 <th class="text-center">显示状态</th>
@@ -105,13 +105,33 @@
                                 <td align="center">{$article.id}</td>
                                 <td align="center">{$article.title}</td>
                                 <td align="center"><img src="__UPLOADS__/{$article.thumb}"  style="height: 30px;"></td>
-                                <td align="center">{$article.cate_id}</td>
-                                <td align="center"><a href="{$article.link_url}"  target="_blank">{$article.link_url}</a></td>
-                                <td align="center">{$article.show_top}</td>
-                                <td align="center">{$article.show_status}</td>
-                                <td align="center">{$article.addtime}</td>
                                 <td align="center">
-                                    <a href="{:url('brand/edit',['id'=>$article.id])}" class="btn btn-primary btn-sm shiny">
+                                    {volist name="cateData" id="cate"}
+                                        {if condition="$cate.id eq $article.cate_id"}
+                                            {$cate.cate_name}
+                                        {/if}
+                                    {/volist}
+                                </td>
+                                <td align="center"><a href="{$article.link_url}"  target="_blank">{$article.link_url}</a></td>
+                                <td align="center">
+                                    {if condition="$article.show_top == 1"}
+                                    <span class="show">置頂</span>
+                                    {else/}
+                                    <span class="noshow">下架</span>
+                                    {/if}
+                                </td>
+                                <td align="center">
+                                    {if condition="$article.show_status == 1"}
+                                    <span class="show">显示</span>
+                                    {else/}
+                                    <span class="noshow">隐藏</span>
+                                    {/if}
+                                </td>
+                                <td align="center">
+                                    {$article.addtime|date='Y-m-d H:m:s',###}
+                                </td>
+                                <td align="center">
+                                    <a href="{:url('article/edit',['id'=>$article.id])}" class="btn btn-primary btn-sm shiny">
                                         <i class="fa fa-edit"></i> 编辑
                                     </a>
                                     <a href="#" onclick="deleteItem({$article.id})" class="btn btn-danger btn-sm shiny">
@@ -158,7 +178,7 @@
                     //请求的媒体类型
                     contentType: "json",
                     //请求地址
-                    url : "{:url('cate/delete')}",
+                    url : "{:url('article/delete')}",
                     //数据，json字符串
                     data : {'id':id},
                     //请求成功

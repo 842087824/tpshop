@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商城后台</title>
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <!-- ueditor -->
+    <script src="__PLUS__/ueditor/ueditor.config.js" rel="stylesheet"></script>
+    <script src="__PLUS__/ueditor/ueditor.all.js" rel="stylesheet"></script>
+    <script src="__PLUS__/ueditor/lang/zh-cn/zh-cn.js" rel="stylesheet"></script>
+
+
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="layout/top"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+            <!-- Page Sidebar -->
+            <div class="page-sidebar" id="sidebar">
+                <!-- Page Sidebar Header-->
+                <div class="sidebar-header-wrapper">
+                    <input class="searchinput" type="text">
+                    <i class="searchicon fa fa-search"></i>
+                    <div class="searchhelper">搜索东西</div>
+                </div>
+                <!-- /Page Sidebar Header -->
+                <!-- Sidebar Menu -->
+                {include file="layout/left"}
+                <!-- /Sidebar Menu -->
+            </div>
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{:url('/admin/index')}">系统</a>
+                        </li>
+                        <li>
+                            <a href="{:url('article/index')}">文章管理</a>
+                        </li>
+                        <li class="active">文章新增</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-blue">
+                <span class="widget-caption">新增文章</span>
+            </div>
+            <div class="widget-body">
+                <div id="horizontal-form">
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="{$articleItem.id}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">所属栏目</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="cate_id">
+                                    {volist name="cateData" id="cate"}
+                                        <option value="{$cate.id}" {if condition="$articleItem.cate_id eq $cate.id"} selected="selected" {/if}>
+                                            <?php echo str_repeat('|----',$cate['level']);?>{$cate.cate_name}
+                                        </option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">是否置顶</label>
+                            <div class="col-sm-6">
+                                <div class="control-group">
+                                    <div class="radio" style="float: left">
+                                        <label>
+                                            <input name="show_top" type="radio" class="colored-blue" value="1" {if condition="$articleItem.show_top eq 1"}checked="checked" {/if} >
+                                            <span class="text">是 </span>
+                                        </label>
+                                    </div>
+                                    <div class="radio" style="float:left;margin-left: 10px">
+                                        <label>
+                                            <input name="show_top" type="radio" class="colored-blue" value="0" {if condition="$articleItem.show_top eq 0"}checked="checked" {/if} >
+                                            <span class="text">否</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">文章名称</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="title" required="" type="text" value="{$articleItem.title}">
+                            </div>
+                            <p class="help-block col-sm-4 red">* 必填</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">文章关键词</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="keywords" type="text" value="{$articleItem.keywords}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">文章描述</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" name="desc">{$articleItem.desc}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">文章作者</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="author" type="text" value="{$articleItem.author}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">作者邮箱</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name="email" type="email" value="{$articleItem.email}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">链接地址</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name="link_url" type="text" value="{$articleItem.link_url}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">缩略图</label>
+                            <div class="col-sm-6">
+                                <input type="file" name="thumb">
+                                <img src="__UPLOADS__/{$articleItem.thumb}" style="height: 50px;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">是否显示</label>
+                            <div class="col-sm-6">
+                                <div class="control-group">
+                                    <div class="radio" style="float: left">
+                                        <label>
+                                            <input name="show_status" type="radio" checked="checked" class="colored-blue" value="1" {if condition="$articleItem.show_status eq 1"}checked="checked" {/if} >
+                                            <span class="text">显示 </span>
+                                        </label>
+                                    </div>
+                                    <div class="radio" style="float:left;margin-left: 10px">
+                                        <label>
+                                            <input name="show_status" type="radio" class="colored-blue" value="0" {if condition="$articleItem.show_status eq 0"}checked="checked" {/if}>
+                                            <span class="text">隐藏</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">文章内容</label>
+                            <div class="col-sm-6">
+                                <textarea id="editor" style="height: 450px;" name="content">{$articleItem.content}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-bordered">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-info" style="color: white">保存信息</button>
+                                <a href="javascript:;" onclick="window.history.go(-1)" class="btn btn-default" style="margin-left: 5px">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <script src="__ADMIN__/style/jquery.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    <!-- editor -->
+    <script>
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        UE.getEditor('editor',{toolbars: [['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript',
+        'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+        'selectall', 'cleardoc']]});
+    </script>
+    
+
+
+</body></html>
