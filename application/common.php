@@ -49,3 +49,21 @@ function subtext($text, $length){
     return $text;
 }
 
+/**
+ * 图片资源处理函数
+ */
+function scan_imgdir($dir=UEDITOR){
+    $files = array();
+    $dir_list = scandir($dir);//获取默认目录下面的文件
+    foreach ($dir_list as $file){
+        if ($file != '.' && $file != '..'){
+            //判断是文件还是文件夹
+            if (is_dir($dir.'/'.$file)){ //是文件夹
+                $files[$file] = scan_imgdir($dir.'/'.$file);
+            }else{ //是图片
+                $files[] = $dir.'/'.$file;//图片的完整路径
+            }
+        }
+    }
+    return $files;
+}

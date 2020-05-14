@@ -154,7 +154,6 @@ class Cate extends Controller
             $this->error('系统内置分类不允许删除');
         }
 
-
         //第三步：删除数据
         $re = $cate->delete($sonids);
         if ($re){

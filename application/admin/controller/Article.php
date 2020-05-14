@@ -159,13 +159,48 @@ class article extends Controller
             }
         }
 
-
         //判断
         if ($flag){
             $this->success('排序成功','index');
         }else{
             $this->success('排序失败');
         }
+    }
 
+    //ueditor图片显示
+    public function imagelist(){
+        //读取public/uditor里面所有图片
+        $files = scan_imgdir();
+        //对二维数组进行拆分
+        $imageList = array(); //组装成一个新的一位数组
+
+        foreach ($files as $v){
+            if (is_array($v)){ //是否是一个数组
+                foreach ($v as $v1){ //对第二个一位数组进行数组解析
+                    $v1 = str_replace(UEDITOR,HTTP_UEDITOR,$v1);
+                    $imageList[] = $v1;
+                }
+            }else{ //非数组
+                $v = str_replace(UEDITOR,HTTP_UEDITOR,$v);
+                $imageList[] = $v;
+            }
+        }
+
+        $this->assign([
+            'imageList'=>$imageList
+        ]);
+        return view('imagelist');
+    }
+
+    //删除ueditor图片
+    public function deleteUeditorImage($path){
+        $data = ['status'=>0,'message'=>'删除失败'];
+        $realpath = str_replace(HTTP_UEDITOR,UEDITOR,$path);
+        if (file_exists($realpath)){
+            @unlink($realpath);
+            $data = ['status'=>1,'message'=>'删除成功'];
+        }
+
+        return $data;
     }
 }

@@ -49,7 +49,7 @@
                         <li>
                             <a href="{:url('link/index')}">友情链接</a>
                         </li>
-                        <li class="active">添加链接</li>
+                        <li class="active">修改链接</li>
                     </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -61,34 +61,36 @@
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-blue">
-                <span class="widget-caption">新增链接</span>
+                <span class="widget-caption">修改链接</span>
             </div>
             <div class="widget-body">
                 <div id="horizontal-form">
                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="{$linkItem.id}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">链接名称</label>
                             <div class="col-sm-6">
-                                <input class="form-control" placeholder="" name="title" required="" type="text">
+                                <input class="form-control" placeholder="" name="title" required="" type="text" value="{$linkItem.title}">
                             </div>
                             <p class="help-block col-sm-4 red">* 必填</p>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">链接地址</label>
                             <div class="col-sm-6">
-                                <input class="form-control" placeholder="全地址" name="link_url" type="text" value="http://">
+                                <input class="form-control" placeholder="全地址" name="link_url" type="text" value="{$linkItem.link_url}" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">链接Logo</label>
                             <div class="col-sm-6">
                                 <input type="file" name="logo">
+                                <img src="__UPLOADS__/{$linkItem.logo}" style="height: 30px;">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">链接描述</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" name="desc"></textarea>
+                                <textarea class="form-control" name="desc">{$linkItem.desc}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -97,13 +99,13 @@
                                 <div class="control-group">
                                     <div class="radio" style="float: left">
                                         <label>
-                                            <input name="type" type="radio" checked="checked" class="colored-blue" value="1">
+                                            <input {if condition="$linkItem.type == 1"}checked="checked" {/if} name="type" type="radio" class="colored-blue" value="1">
                                             <span class="text">文字 </span>
                                         </label>
                                     </div>
                                     <div class="radio" style="float:left;margin-left: 10px">
                                         <label>
-                                            <input name="type" type="radio" class="colored-blue" value="2">
+                                            <input {if condition="$linkItem.type == 2"}checked="checked" {/if} name="type" type="radio" class="colored-blue" value="2">
                                             <span class="text">图片</span>
                                         </label>
                                     </div>
@@ -116,13 +118,13 @@
                                 <div class="control-group">
                                     <div class="radio" style="float: left">
                                         <label>
-                                            <input name="status" type="radio" checked="checked" class="colored-blue" value="1">
+                                            <input {if condition="$linkItem.status == 1"}checked="checked" {/if} name="status" type="radio" class="colored-blue" value="1">
                                             <span class="text">显示 </span>
                                         </label>
                                     </div>
                                     <div class="radio" style="float:left;margin-left: 10px">
                                         <label>
-                                            <input name="status" type="radio" class="colored-blue" value="0">
+                                            <input {if condition="$linkItem.type == 0"}checked="checked" {/if} name="status" type="radio" class="colored-blue" value="0">
                                             <span class="text">隐藏</span>
                                         </label>
                                     </div>
