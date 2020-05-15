@@ -67,7 +67,7 @@
                     <li>
                         <a href="{:url('/admin/index')}">系统</a>
                     </li>
-                    <li class="active">品牌管理</li>
+                    <li class="active">商品属性管理</li>
                 </ul>
             </div>
             <!-- /Page Breadcrumb -->
@@ -89,23 +89,26 @@
                                             <thead class="">
                                             <tr>
                                                 <th class="text-center" width="6%">ID</th>
-                                                <th class="text-center">商品分类名</th>
-                                                <th class="text-center" width="22%">操作</th>
+                                                <th class="text-center">商品属性名称</th>
+                                                <th class="text-center">商品属性类型</th>
+                                                <th class="text-center">商品所属类型</th>
+                                                <th class="text-center">值</th>
+                                                <th class="text-center" width="14%">操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {volist name="typeData" id="type"}
+                                            {volist name="attrData" id="attr"}
                                             <tr>
-                                                <td align="center">{$type.id}</td>
-                                                <td align="center">{$type.type_name}</td>
+                                                <td align="center">{$attr.id}</td>
+                                                <td align="center">{$attr.attr_name}</td>
+                                                <td align="center">{$attr.attr_type == 1 ? '单选' : '唯一'}</td>
+                                                <td align="center">{$attr.type_name}</td>
+                                                <td align="center">{$attr.attr_values}</td>
                                                 <td align="center">
-                                                    <a href="{:url('type/edit',['id'=>$type.id])}" class="btn btn-darkorange btn-sm shiny">
-                                                        <i class="fa fa-list-ul"></i> 属性列表
-                                                    </a>
-                                                    <a href="{:url('type/edit',['id'=>$type.id])}" class="btn btn-primary btn-sm shiny">
+                                                    <a href="{:url('attr/edit',['id'=>$attr.id])}" class="btn btn-primary btn-sm shiny">
                                                         <i class="fa fa-edit"></i> 编辑
                                                     </a>
-                                                    <a href="#" onclick="deleteItem({$type.id})" class="btn btn-danger btn-sm shiny">
+                                                    <a href="#" onclick="deleteItem({$attr.id})" class="btn btn-danger btn-sm shiny">
                                                         <i class="fa fa-trash-o"></i> 删除
                                                     </a>
                                                 </td>
@@ -153,7 +156,7 @@
                 //请求的媒体类型
                 contentType: "json",
                 //请求地址
-                url : "{:url('type/delete')}",
+                url : "{:url('attr/delete')}",
                 //数据，json字符串
                 data : {'id':id},
                 //请求成功

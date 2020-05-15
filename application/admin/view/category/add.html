@@ -47,9 +47,9 @@
                             <a href="{:url('/admin/index')}">系统</a>
                         </li>
                         <li>
-                            <a href="{:url('cate/index')}">栏目管理</a>
+                            <a href="{:url('category/index')}">商品分类管理</a>
                         </li>
-                        <li class="active">添加栏目</li>
+                        <li class="active">添加商品分类</li>
                     </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -61,7 +61,7 @@
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-blue">
-                <span class="widget-caption">新增栏目</span>
+                <span class="widget-caption">新增商品分类</span>
             </div>
             <div class="widget-body">
                 <div id="horizontal-form">
@@ -71,20 +71,24 @@
                             <div class="col-sm-6" >
                                 <select class="form-control" name="pid">
                                     <option value="0">顶级分类</option>
-                                    {volist name="cateList" id="cate"}
-                                        <option value="{$cate.id}" {if condition="$cate['allow_son'] eq 0"} disabled="disabled" {/if}>
-                                            <?php echo str_repeat('|----',$cate['level']);?>{$cate.cate_name}
-                                        </option>
+                                    {volist name="categoryList" id="category"}
+                                        <option value="{$category.id}"><?php echo str_repeat('|----',$category['level']);?>{$category.cate_name}</option>
                                     {/volist}
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">栏目名称</label>
+                            <label class="col-sm-2 control-label no-padding-right">商品分类名称</label>
                             <div class="col-sm-6">
                                 <input class="form-control" placeholder="" name="cate_name" required="" type="text">
                             </div>
                             <p class="help-block col-sm-4 red">* 必填</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">商品分类缩略图</label>
+                            <div class="col-sm-6">
+                                <input placeholder="" name="cate_img" type="file">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">显示到导航</label>
@@ -92,13 +96,13 @@
                                 <div class="control-group">
                                     <div class="radio" style="float: left">
                                         <label>
-                                            <input name="show_nav" type="radio" class="colored-blue" value="1">
+                                            <input name="show_cate" type="radio" class="colored-blue" checked="checked" value="1">
                                             <span class="text">是 </span>
                                         </label>
                                     </div>
                                     <div class="radio" style="float:left;margin-left: 10px">
                                         <label>
-                                            <input name="show_nav" type="radio" class="colored-blue" checked="checked"  value="0">
+                                            <input name="show_cate" type="radio" class="colored-blue" value="0">
                                             <span class="text">否</span>
                                         </label>
                                     </div>
@@ -115,7 +119,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">描述</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" name="cate_desc"></textarea>
+                                <textarea class="form-control" name="desc"></textarea>
                             </div>
                         </div>
 
