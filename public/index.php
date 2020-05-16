@@ -16,5 +16,8 @@ define('APP_PATH', __DIR__ . '/../application/');
 //定义UEDITOR上传的图片的位置
 define('UEDITOR', __DIR__ . '/../public/ueditor');
 define('HTTP_UEDITOR','/ueditor');
+//定义上传图片的路径
+define('IMG_UPLOADS', __DIR__ . '/../public/uploads/');
+
 // 加载框架引导文件
 require __DIR__ . '/../thinkphp/start.php';

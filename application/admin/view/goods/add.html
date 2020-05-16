@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商城后台</title>
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <!-- ueditor -->
+    <script src="__PLUS__/ueditor/ueditor.config.js" rel="stylesheet"></script>
+    <script src="__PLUS__/ueditor/ueditor.all.js" rel="stylesheet"></script>
+    <script src="__PLUS__/ueditor/lang/zh-cn/zh-cn.js" rel="stylesheet"></script>
+
+    <style>
+        .price{
+            width: 150px;
+            display: inline-block;
+        }
+        .abtn{
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="layout/top"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+            <!-- Page Sidebar -->
+            <div class="page-sidebar" id="sidebar">
+                <!-- Page Sidebar Header-->
+                <div class="sidebar-header-wrapper">
+                    <input class="searchinput" type="text">
+                    <i class="searchicon fa fa-search"></i>
+                    <div class="searchhelper">搜索东西</div>
+                </div>
+                <!-- /Page Sidebar Header -->
+                <!-- Sidebar Menu -->
+                {include file="layout/left"}
+                <!-- /Sidebar Menu -->
+            </div>
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{:url('/admin/index')}">系统</a>
+                        </li>
+                        <li>
+                            <a href="{:url('goods/index')}">商品管理</a>
+                        </li>
+                        <li class="active">添加商品</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <!--<div class="widget-header bordered-bottom bordered-blue">-->
+                <!--<span class="widget-caption">新增商品</span>-->
+            <!--</div>-->
+            <div class="widget-body">
+                <div id="horizontal-form">
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+
+                        <div class="widget-main ">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs tabs-flat" id="myTab11">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#baseinfo">
+                                            商品基本信息
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#goodsdesc">
+                                            商品描述
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#memberprice">
+                                            会员价格
+                                        </a>
+                                    </li>
+                                    <!--<li>-->
+                                        <!--<a data-toggle="tab" href="#goodsattr">-->
+                                            <!--商品属性-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <li>
+                                        <a data-toggle="tab" href="#goodsphoto">
+                                            商品相册
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content tabs-flat">
+                                    <!-- 商品基本信息  开始-->
+                                    <div id="baseinfo" class="tab-pane in active">
+                                        <!-- 商品名称 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">商品名称</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" placeholder="" name="goods_name" required="" type="text">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+                                        <!-- 商品主图 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">商品主图</label>
+                                            <div class="col-sm-6">
+                                                <input name="og_thumb" type="file" class="form-control" style="border: none;box-shadow: none;margin-left: -12px">
+                                            </div>
+                                        </div>
+                                        <!-- 商品是否上架 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">是否上架</label>
+                                            <div class="col-sm-6">
+                                                <div class="control-group">
+                                                    <div class="radio" style="float: left">
+                                                        <label>
+                                                            <input name="on_sale" type="radio" checked="checked" class="colored-blue" value="1">
+                                                            <span class="text">是 </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio" style="float:left;margin-left: 10px">
+                                                        <label>
+                                                            <input name="on_sale" type="radio" class="colored-blue" value="0">
+                                                            <span class="text">否</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 所属栏目 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">所属栏目</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" name="category_id">
+                                                    <option value="">请选择</option>
+                                                    {volist name="categoryData" id="category"}
+                                                        <option value="{$category.id}"><?php echo str_repeat('|----',$category['level']);?>{$category.cate_name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+                                        <!-- 所属品牌 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">所属品牌</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" name="brand_id">
+                                                    <option value="">请选择</option>
+                                                    {volist name="brandData" id="brand"}
+                                                        <option value="{$brand.id}">{$brand.brand_name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+                                        <!-- 市场价 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">市场价</label>
+                                            <div class="col-sm-6">
+                                                <input name="market_price" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <!-- 本店价 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">本店价</label>
+                                            <div class="col-sm-6">
+                                                <input name="shop_price" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <!-- 商品重量 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">重量</label>
+                                            <div class="col-sm-6">
+                                                <input name="goods_weight" type="text" class="form-control" style="width: 200px;display: inline-block">
+                                                <select name="goods_unit">
+                                                    <option value="kg">kg</option>
+                                                    <option value="g">g</option>
+                                                </select>
+                                            </div>
+                                            <p></p>
+                                        </div>
+
+                                    </div>
+                                    <!-- 商品基本信息  结束-->
+
+                                    <!-- 商品描述 开始 -->
+                                    <div id="goodsdesc" class="tab-pane">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">商品描述</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="editor" style="height: 400px;width: 800px" name="goods_desc"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 商品描述 结束 -->
+
+                                    <!-- 会员价格 开始 -->
+                                    <div id="memberprice" class="tab-pane">
+                                        {volist name="memberLevelData" id="memberLevel"}
+                                        <!-- 注册会员 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">{$memberLevel.level_name}</label>
+                                            <div class="col-sm-6">
+                                                <input name="mp[{$memberLevel.id}]" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        {/volist}
+                                    </div>
+                                    <!-- 会员价格 结束 -->
+
+
+                                    <!-- 商品属性 开始 -->
+                                    <!--<div id="goodsattr" class="tab-pane">-->
+                                        <!--<div class="form-group">-->
+                                            <!--<label class="col-sm-2 control-label no-padding-right">商品类型</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<select class="form-control price" name="type_id">-->
+                                                    <!--<option>请选择</option>-->
+                                                    <!--{volist name="typeData" id="type"}-->
+                                                        <!--<option value="{$type.id}">{$type.type_name}</option>-->
+                                                    <!--{/volist}-->
+                                                <!--</select>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+                                        <!--<div id="attr_list">-->
+                                            <!--&lt;!&ndash; 属性显示  下方js实现 &ndash;&gt;-->
+                                        <!--</div>-->
+
+                                    <!--</div>-->
+                                    <!-- 商品属性 结束 -->
+
+
+                                    <!-- 商品相册 开始 -->
+                                    <div id="goodsphoto" class="tab-pane">
+                                        <!-- 商品相册 -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">商品相册</label>
+                                            <div class="col-sm-6">
+                                                <a href="#" onclick="addrow(this)">[+]</a>
+                                                <input name="goods_photo[]" type="file" class="form-control" style="border: none;box-shadow: none;width: 250px;display: inline-block">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 商品相册 结束 -->
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group form-bordered">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-info" style="color: white">保存信息</button>
+                                <a href="javascript:;" onclick="window.history.go(-1)" class="btn btn-default" style="margin-left: 5px">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <script src="__ADMIN__/style/jquery.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    <!-- editor -->
+    <script>
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        UE.getEditor('editor',{toolbars: [['source','bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript',
+                'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+                'selectall', 'cleardoc','|','simpleupload','insertimage']]});
+    </script>
+
+    <!-- 商品类型 下拉事件监听 -->
+    <script>
+        $("select[name=type_id]").change(function () {
+            //获取当前的type_id的值
+            var type_id = $(this).val();
+            $.ajax({
+                //请求方式
+                type : "post",
+                //请求地址
+                url : "{:url('attr/ajaxGetAttr')}",
+                //数据，json字符串
+                data : {'type_id':type_id},
+                dataType:"json",
+                //请求成功
+                success : function(data) {
+                    var html = '';
+                    $(data).each(function (k,v) {
+                        //判断是单选 还是  唯一
+                        if (v.attr_type == 1){
+                            //***********************************单选属性**********************************
+                            html += "<div class='form-group'>";
+                            html += "<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"</label>";
+                            //拆分 黑色,银色,白色
+                            html += "<div class='col-sm-6'><a href='#' class='abtn' onclick='addrow(this)'>[+]</a>";
+                            var attrValuesArr = v.attr_values.split(",");
+                            html += "<select class='form-control price'>";
+                            html += "<option>请选择</option>";
+                            for (let i = 0; i < attrValuesArr.length ; i++) {
+                                html += "<option value='"+attrValuesArr[i]+"'>"+attrValuesArr[i]+"</option>>";
+                            }
+                            html += "</select>";
+                            html += "<input type='text' class='form-control price' placeholder='价格' style='margin-left: 5px'></div></div>";
+                        }else{
+                            //***********************************唯一属性**********************************
+                            if (v.attr_values){ //判断是否有默认值
+                                html += "<div class='form-group'>";
+                                html += "<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"</label>";
+                                //拆分 黑色,银色,白色
+                                html += "<div class='col-sm-6'>";
+                                var attrValuesArr = v.attr_values.split(",");
+                                html += "<select class='form-control price'>";
+                                html += "<option>请选择</option>";
+                                for (let i = 0; i < attrValuesArr.length ; i++) {
+                                    html += "<option value='"+attrValuesArr[i]+"'>"+attrValuesArr[i]+"</option>>";
+                                }
+                                html += "</select></div></div>";
+                            }else{
+                                html += "<div class='form-group'>";
+                                html += "<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"</label>";
+                                html += "<div class='col-sm-6'>";
+                                html += "<input type='text' class='form-control price'><br />";
+                                html += "</div></div>";
+                            }
+                        }
+
+                        // html += v.attr_name+" <input type='text'/><br>";
+                    });
+                    $("#attr_list").html(html);
+                }
+            })
+        });
+
+
+        /*  点击 [+] 实现克隆一行数据 */
+        function addrow(obj) {
+            var div  = $(obj).parent().parent();
+            if ($(obj).html() == '[+]'){
+                var newdiv = div.clone();//克隆一行
+                //加号[+]变减号[-]
+                newdiv.find('a').html('[-]');
+                div.after(newdiv);
+            }else{
+                div.remove();
+            }
+        }
+    </script>
+
+
+</body></html>

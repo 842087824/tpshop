@@ -9,12 +9,10 @@ use	think\Validate;
  */
 class Attr extends Validate{
     protected $rule = [
-      'attr_name' => 'require',//判断为必填 | 唯一(表名)
-      'attr_values' => 'require'
+      'attr_name' => 'require'//判断为必填 | 唯一(表名)
     ];
 
     protected $message = [
-      'attr_name.require'=>'商品属性名称必填',
-      'attr_values.require'=>'商品属性值不可以为空'
+      'attr_name.require'=>'商品属性名称必填'
     ];
 }

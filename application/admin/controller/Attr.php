@@ -131,4 +131,15 @@ class Attr extends Controller{
             $this->success('排序失败');
         }
     }
+
+
+    //异步请求获取指定类型下的属性
+    public function ajaxGetAttr(){
+        if (request()->isPost()){
+            $typeId = input('type_id');
+            $attrRes = db('attr')->where(['type_id'=>$typeId])->select();
+            echo json_encode($attrRes);
+        }
+    }
+
 }
