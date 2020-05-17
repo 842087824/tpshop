@@ -67,7 +67,7 @@
                     <li>
                         <a href="{:url('/admin/index')}">系统</a>
                     </li>
-                    <li class="active">品牌管理</li>
+                    <li class="active">商品管理</li>
                 </ul>
             </div>
             <!-- /Page Breadcrumb -->
@@ -75,13 +75,13 @@
             <!-- Page Body -->
             <div class="page-body">
 
-                <button type="button" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = 'add'" style="margin-bottom: 5px">
+                <button type="button" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('goods/add')}'" style="margin-bottom: 5px">
                     <i class="fa fa-plus"></i> Add
                 </button>
 
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 col-xs-12">
-                        <form method="post" action="{:url('brand/listOrder')}">
+                        <form method="post" action="{:url('goods/listOrder')}">
                             <div class="widget">
                                 <div class="widget-body">
                                     <div class="flip-scroll">
@@ -89,46 +89,59 @@
                                             <thead class="">
                                             <tr>
                                                 <th class="text-center">排序</th>
-                                                <th class="text-center">ID</th>
-                                                <th class="text-center">品牌名</th>
-                                                <th class="text-center">品牌地址</th>
-                                                <th class="text-center">品牌LOGO</th>
-                                                <th class="text-center" width="30%">品牌描述</th>
-                                                <th class="text-center">品牌状态</th>
-                                                <th class="text-center">操作</th>
+                                                <th class="text-center" width="4%">ID</th>
+                                                <th class="text-center">名称</th>
+                                                <th class="text-center">编号</th>
+                                                <th class="text-center">缩略图</th>
+                                                <th class="text-center">市场价</th>
+                                                <th class="text-center">本店价</th>
+                                                <th class="text-center">上架</th>
+                                                <th class="text-center">栏目</th>
+                                                <th class="text-center">品牌</th>
+                                                <th class="text-center">类型</th>
+                                                <th class="text-center">重量</th>
+                                                <th class="text-center">单位</th>
+                                                <th class="text-center" width="18%">操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {volist name="brandData" id="brandData"}
+                                            {volist name="goodsData" id="goods"}
                                             <tr>
                                                 <td align="center">
-                                                    <input type="text" style="width: 50px;text-align: center;" name="{$brandData.id}" value="{$brandData.brand_sort}">
+                                                    <input type="text" style="width: 50px;text-align: center;" name="{$goods.id}" value="{$goods.goods_sort}">
                                                 </td>
-                                                <td align="center">{$brandData.id}</td>
-                                                <td align="center">{$brandData.brand_name}</td>
-                                                <td align="center"><a href="{$brandData.brand_url}"  target="_blank">{$brandData.brand_url}</a></td>
+                                                <td align="center">{$goods.id}</td>
+                                                <td align="center">{$goods.goods_name}</td>
+                                                <td align="center">{$goods.goods_code}</td>
                                                 <td align="center">
-                                                    {if condition="$brandData.brand_img == ''"}
-                                                    暂无图片
+                                                    {if condition="$goods.sm_thumb == ''"}
+                                                        暂无图片
                                                     {else/}
-                                                    <img src="__UPLOADS__/{$brandData.brand_img}" style="height: 30px;">
-                                                    {/if}
-
-                                                </td>
-                                                <td align="center">{$brandData.brand_desc | subtext=20}</td>
-                                                <td align="center">
-                                                    {if condition="$brandData.brand_status == 1"}
-                                                    <span class="show">显示</span>
-                                                    {else/}
-                                                    <!--<span class="notshow">隐藏</span>-->
-                                                    <span class="noshow">隐藏</span>
+                                                        <img src="__UPLOADS__/{$goods.sm_thumb}" style="height: 30px;">
                                                     {/if}
                                                 </td>
+                                                <td align="center">{$goods.market_price}</td>
+                                                <td align="center">{$goods.shop_price}</td>
                                                 <td align="center">
-                                                    <a href="{:url('brand/edit',['id'=>$brandData.id])}" class="btn btn-primary btn-sm shiny">
+                                                    {if condition="$goods.on_sale == 1"}
+                                                        <span class="show">上架</span>
+                                                    {else/}
+                                                        <span class="noshow">下架</span>
+                                                    {/if}
+                                                </td>
+                                                <td align="center">{$goods.cate_name}</td>
+                                                <td align="center">{$goods.brand_name == '' ? '未设置' : $goods.brand_name}</td>
+                                                <td align="center">{$goods.type_name == '' ? '未设置' : $goods.type_name}</td>
+                                                <td align="center">{$goods.goods_weight}</td>
+                                                <td align="center">{$goods.goods_unit}</td>
+                                                <td align="center">
+                                                    <a href="{:url('attr/index',['id'=>$goods.id])}" class="btn btn-darkorange btn-sm shiny">
+                                                        <i class="fa fa-list-ul"></i> 库存
+                                                    </a>
+                                                    <a href="{:url('goods/edit',['id'=>$goods.id])}" class="btn btn-primary btn-sm shiny">
                                                         <i class="fa fa-edit"></i> 编辑
                                                     </a>
-                                                    <a href="#" onclick="deleteItem({$brandData.id})" class="btn btn-danger btn-sm shiny">
+                                                    <a href="#" onclick="deleteItem({$goods.id})" class="btn btn-danger btn-sm shiny">
                                                         <i class="fa fa-trash-o"></i> 删除
                                                     </a>
                                                 </td>
@@ -177,7 +190,7 @@
                 //请求的媒体类型
                 contentType: "json",
                 //请求地址
-                url : "{:url('brand/delete')}",
+                url : "{:url('goods/delete')}",
                 //数据，json字符串
                 data : {'id':id},
                 //请求成功

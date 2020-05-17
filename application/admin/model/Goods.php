@@ -56,6 +56,7 @@ class Goods extends Model{
         /**
          * 1.解决添加会员价格时，插入对应的商品id
          * 2.解决商品相册上传时，插入对应的商品id和各自生成3张对应的缩略图
+         * 3.解决商品属性，插入对应的商品id 和 添加进入对应的数据库表
          * 后置事件
          */
         Goods::afterInsert(function ($goods){
@@ -99,22 +100,91 @@ class Goods extends Model{
                         $image->thumb(200,	200)->save(IMG_UPLOADS .$mdPhoto);
                         $image->thumb(80,	80)->save(IMG_UPLOADS .$smPhoto);
 
-                        //第四步 删除原图
-                        @unlink(IMG_UPLOADS.$ogPhoto);
 
                         //第五步 添加数据到数据库
                         db('goods_photo')
-                            ->insert(['goods_id'=>$goodId,'big_photo'=>$bigPhoto,'md_photo'=>$mdPhoto,'sm_photo'=>$smPhoto]);
+                            ->insert(['goods_id'=>$goodId,'og_photo'=>$ogPhoto,'big_photo'=>$bigPhoto,'md_photo'=>$mdPhoto,'sm_photo'=>$smPhoto]);
                     }else{
                         //	上传失败获取错误信息
                         echo	$file->getError();
                     }
                 }
-
-
             }
 
+            /**
+             * 处理商品属性
+             */
+            $goodsData = input('post.');
+            $i = 0;
+            if (isset($goodsData['goods_attr'])){
+                foreach ($goodsData['goods_attr'] as $k => $v){
+                    if (is_array($v)){//判断是否为数组
+                        if (!empty($v)){ //循环goods_attr数组
+                            foreach ($v as $k1 => $v1){
+                                if (!$v1){
+                                    $i++;
+                                    continue;
+                                }
+                                db('goods_attr')->insert(['attr_id'=>$k,'attr_value'=>$v1,'attr_price'=>$goodsData['attr_price'][$i],'goods_id'=>$goodId]);
+                                $i++;
+                            }
+                        }
+                    }else{ //判断为字符串 也就是唯一属性 不涉及价格问题
+                        db('goods_attr')->insert(['attr_id'=>$k,'attr_value'=>$v,'goods_id'=>$goodId]);
+                    }
+                }
+            }
         });
+
+
+        /**
+         * 删除商品用，前置删除
+         * 1.删除关联的三张表数据 和 图片(商品会员表、商品属性表、商品相册表)
+         * 2.删除本身的数据 和 图片
+         */
+        Goods::beforeDelete(function($goods){
+            $goodsId = $goods->id;
+            //1.删除主图 及其 缩略图
+            if ($goods->og_thumb){ //判断是否有图片
+                $thumb = [];
+                $thumb[] = IMG_UPLOADS.$goods->og_thumb;//原图
+                $thumb[] = IMG_UPLOADS.$goods->big_thumb;//大图
+                $thumb[] = IMG_UPLOADS.$goods->md_thumb;//中图
+                $thumb[] = IMG_UPLOADS.$goods->sm_thumb;//小图
+
+                foreach ($thumb as $k => $v){
+                    if (file_exists($v)){
+                        @unlink($v);
+                    }
+                }
+            }
+            //2.删除会员价格
+            db('member_price')->where('goods_id','=',$goodsId)->delete();
+            //3.删除关联的商品属性
+            db('goods_attr')->where('goods_id','=',$goodsId)->delete();
+            //4.删除商品相册及其缩略图
+            $goodsPhotoRes  = model('GoodsPhoto')->where('goods_id','=',$goodsId)->select();
+            if (!empty($goodsPhotoRes)){
+                foreach ($goodsPhotoRes as $k => $v){
+                    if ($v->og_photo){ //判断是否有图片
+                        $photo = [];
+                        $photo[] = IMG_UPLOADS.$v->og_photo;//原图
+                        $photo[] = IMG_UPLOADS.$v->big_photo;//大图
+                        $photo[] = IMG_UPLOADS.$v->md_photo;//中图
+                        $photo[] = IMG_UPLOADS.$v->sm_photo;//小图
+
+                        foreach ($photo as $k1 => $v1){
+                            if (file_exists($v1)){
+                                @unlink($v1);
+                            }
+                        }
+                    }
+                }
+            }
+            model('GoodsPhoto')->where('goods_id','=',$goodsId)->delete();
+
+        });
+
     }
 
 

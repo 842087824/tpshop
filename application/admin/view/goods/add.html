@@ -99,11 +99,11 @@
                                             会员价格
                                         </a>
                                     </li>
-                                    <!--<li>-->
-                                        <!--<a data-toggle="tab" href="#goodsattr">-->
-                                            <!--商品属性-->
-                                        <!--</a>-->
-                                    <!--</li>-->
+                                    <li>
+                                        <a data-toggle="tab" href="#goodsattr">
+                                            商品属性
+                                        </a>
+                                    </li>
                                     <li>
                                         <a data-toggle="tab" href="#goodsphoto">
                                             商品相册
@@ -231,24 +231,23 @@
 
 
                                     <!-- 商品属性 开始 -->
-                                    <!--<div id="goodsattr" class="tab-pane">-->
-                                        <!--<div class="form-group">-->
-                                            <!--<label class="col-sm-2 control-label no-padding-right">商品类型</label>-->
-                                            <!--<div class="col-sm-6">-->
-                                                <!--<select class="form-control price" name="type_id">-->
-                                                    <!--<option>请选择</option>-->
-                                                    <!--{volist name="typeData" id="type"}-->
-                                                        <!--<option value="{$type.id}">{$type.type_name}</option>-->
-                                                    <!--{/volist}-->
-                                                <!--</select>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
+                                    <div id="goodsattr" class="tab-pane">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">商品类型</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control price" name="type_id">
+                                                    <option>请选择</option>
+                                                    {volist name="typeData" id="type"}
+                                                        <option value="{$type.id}">{$type.type_name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                        <!--<div id="attr_list">-->
-                                            <!--&lt;!&ndash; 属性显示  下方js实现 &ndash;&gt;-->
-                                        <!--</div>-->
-
-                                    <!--</div>-->
+                                        <div id="attr_list">
+                                            <!-- 属性显示  下方js实现 -->
+                                        </div>
+                                    </div>
                                     <!-- 商品属性 结束 -->
 
 
@@ -329,13 +328,13 @@
                             //拆分 黑色,银色,白色
                             html += "<div class='col-sm-6'><a href='#' class='abtn' onclick='addrow(this)'>[+]</a>";
                             var attrValuesArr = v.attr_values.split(",");
-                            html += "<select class='form-control price'>";
-                            html += "<option>请选择</option>";
+                            html += "<select class='form-control price' name='goods_attr["+v.id+"][]'>";
+                            html += "<option value=''>请选择</option>";
                             for (let i = 0; i < attrValuesArr.length ; i++) {
                                 html += "<option value='"+attrValuesArr[i]+"'>"+attrValuesArr[i]+"</option>>";
                             }
                             html += "</select>";
-                            html += "<input type='text' class='form-control price' placeholder='价格' style='margin-left: 5px'></div></div>";
+                            html += "<input type='text' class='form-control price' placeholder='价格' name='attr_price[]' style='margin-left: 5px'></div></div>";
                         }else{
                             //***********************************唯一属性**********************************
                             if (v.attr_values){ //判断是否有默认值
@@ -344,8 +343,8 @@
                                 //拆分 黑色,银色,白色
                                 html += "<div class='col-sm-6'>";
                                 var attrValuesArr = v.attr_values.split(",");
-                                html += "<select class='form-control price'>";
-                                html += "<option>请选择</option>";
+                                html += "<select class='form-control price' name='goods_attr["+v.id+"]'>";
+                                html += "<option value=''>请选择</option>";
                                 for (let i = 0; i < attrValuesArr.length ; i++) {
                                     html += "<option value='"+attrValuesArr[i]+"'>"+attrValuesArr[i]+"</option>>";
                                 }
@@ -354,7 +353,7 @@
                                 html += "<div class='form-group'>";
                                 html += "<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"</label>";
                                 html += "<div class='col-sm-6'>";
-                                html += "<input type='text' class='form-control price'><br />";
+                                html += "<input type='text' class='form-control price' name='goods_attr["+v.id+"]'><br />";
                                 html += "</div></div>";
                             }
                         }

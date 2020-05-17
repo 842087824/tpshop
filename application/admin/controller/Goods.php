@@ -14,6 +14,11 @@ class Goods extends Controller
     //列表显示
     public function index(){
        $goodsData = db('goods')
+           ->alias('g')
+           ->field('g.*,c.cate_name,t.type_name,b.brand_name')
+           ->join('category c','g.category_id = c.id','LEFT')
+           ->join('type t','g.type_id = t.id','LEFT')
+           ->join('brand b','g.brand_id = b.id','LEFT')
            ->order('goods_sort','desc')
            ->paginate(10);
        $page = $goodsData->render();
@@ -116,30 +121,14 @@ class Goods extends Controller
 
     //删除信息
     public function delete($id){
-        $data = Array();
-        //第一步：查询数据并显示出来
-        $goodsItem = db('goods')
-            ->where('id','=',$id)
-            ->find();
 
-        //第二步：删除旧图片
-        if ($goodsItem['goods_img'] != ''){
-            //第二步：拼接真实的图片路径
-            $imgRealPath = UPLOADS_IMG.'/'.$goodsItem['goods_img'];
-            if (file_exists($imgRealPath)){
-                @unlink($imgRealPath);
-            }
-        }
-        //第三步：删除数据
-        $re = db('goods')
-            ->where('id','=',$id)
-            ->delete();
+        $re = model('goods')->destroy($id);
+
         if ($re){
             $data = ['status'=>1,'message'=>'删除成功'];
         }else{
             $data = ['status'=>0,'message'=>'删除失败'];
         }
-
         ///第四步：传递数据给前台
         return $data;
     }
@@ -157,7 +146,6 @@ class Goods extends Controller
                 }
             }
         }
-
         //判断
         if ($flag){
             $this->success('排序成功','index');
