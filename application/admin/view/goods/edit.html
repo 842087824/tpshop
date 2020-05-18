@@ -16,6 +16,9 @@
     <link href="__ADMIN__/style/demo.css" rel="stylesheet">
     <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
     <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <!-- layer -->
+    <link href="__ADMIN__/style/layer.css" rel="stylesheet">
+
     <!-- ueditor -->
     <script src="__PLUS__/ueditor/ueditor.config.js" rel="stylesheet"></script>
     <script src="__PLUS__/ueditor/ueditor.all.js" rel="stylesheet"></script>
@@ -63,7 +66,7 @@
                         <li>
                             <a href="{:url('goods/index')}">商品管理</a>
                         </li>
-                        <li class="active">添加商品</li>
+                        <li class="active">修改商品</li>
                     </ul>
                 </div>
                 <!-- /Page Breadcrumb -->
@@ -80,6 +83,12 @@
             <div class="widget-body">
                 <div id="horizontal-form">
                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" name="id" value="{$goodsItem.id}">
+                        <input type="hidden" name="old_og_thumb"  value="{$goodsItem.og_thumb}">
+                        <input type="hidden" name="old_big_thumb" value="{$goodsItem.big_thumb}">
+                        <input type="hidden" name="old_md_thumb"  value="{$goodsItem.md_thumb}">
+                        <input type="hidden" name="old_sm_thumb"  value="{$goodsItem.sm_thumb}">
 
                         <div class="widget-main ">
                             <div class="tabbable">
@@ -117,7 +126,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">商品名称</label>
                                             <div class="col-sm-6">
-                                                <input class="form-control" placeholder="" name="goods_name" required="" type="text">
+                                                <input class="form-control" placeholder="" name="goods_name" required="" type="text" value="{$goodsItem.goods_name}">
                                             </div>
                                             <p class="help-block col-sm-4 red">* 必填</p>
                                         </div>
@@ -126,6 +135,7 @@
                                             <label class="col-sm-2 control-label no-padding-right">商品主图</label>
                                             <div class="col-sm-6">
                                                 <input name="og_thumb" type="file" class="form-control" style="border: none;box-shadow: none;margin-left: -12px">
+                                                <img src="__UPLOADS__/{$goodsItem.md_thumb}" style="height: 40px;">
                                             </div>
                                         </div>
                                         <!-- 商品是否上架 -->
@@ -135,13 +145,13 @@
                                                 <div class="control-group">
                                                     <div class="radio" style="float: left">
                                                         <label>
-                                                            <input name="on_sale" type="radio" checked="checked" class="colored-blue" value="1">
+                                                            <input name="on_sale" type="radio" {if condition="$goodsItem.on_sale == 1"} checked="checked" {/if} class="colored-blue" value="1">
                                                             <span class="text">是 </span>
                                                         </label>
                                                     </div>
                                                     <div class="radio" style="float:left;margin-left: 10px">
                                                         <label>
-                                                            <input name="on_sale" type="radio" class="colored-blue" value="0">
+                                                            <input name="on_sale" type="radio" {if condition="$goodsItem.on_sale == 0"} checked="checked" {/if} class="colored-blue" value="0">
                                                             <span class="text">否</span>
                                                         </label>
                                                     </div>
@@ -155,7 +165,9 @@
                                                 <select class="form-control" name="category_id">
                                                     <option value="">请选择</option>
                                                     {volist name="categoryData" id="category"}
-                                                        <option value="{$category.id}"><?php echo str_repeat('|----',$category['level']);?>{$category.cate_name}</option>
+                                                        <option value="{$category.id}" {if condition="$goodsItem.category_id == $category.id"} selected {/if}>
+                                                            <?php echo str_repeat('|----',$category['level']);?>{$category.cate_name}
+                                                        </option>
                                                     {/volist}
                                                 </select>
                                             </div>
@@ -168,7 +180,9 @@
                                                 <select class="form-control" name="brand_id">
                                                     <option value="">请选择</option>
                                                     {volist name="brandData" id="brand"}
-                                                        <option value="{$brand.id}">{$brand.brand_name}</option>
+                                                        <option value="{$brand.id}" {if condition="$goodsItem.brand_id == $brand.id"} selected {/if}>
+                                                            {$brand.brand_name}
+                                                        </option>
                                                     {/volist}
                                                 </select>
                                             </div>
@@ -178,24 +192,24 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">市场价</label>
                                             <div class="col-sm-6">
-                                                <input name="market_price" type="text" class="form-control">
+                                                <input name="market_price" type="text" class="form-control" value="{$goodsItem.market_price}">
                                             </div>
                                         </div>
                                         <!-- 本店价 -->
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">本店价</label>
                                             <div class="col-sm-6">
-                                                <input name="shop_price" type="text" class="form-control">
+                                                <input name="shop_price" type="text" class="form-control" value="{$goodsItem.shop_price}">
                                             </div>
                                         </div>
                                         <!-- 商品重量 -->
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">重量</label>
                                             <div class="col-sm-6">
-                                                <input name="goods_weight" type="text" class="form-control" style="width: 200px;display: inline-block">
+                                                <input name="goods_weight" type="text" class="form-control" style="width: 200px;display: inline-block" value="{$goodsItem.goods_weight}">
                                                 <select name="goods_unit">
-                                                    <option value="kg">kg</option>
-                                                    <option value="g">g</option>
+                                                    <option value="kg" {if condition="$goodsItem.goods_unit == 'kg'"} selected {/if}>kg</option>
+                                                    <option value="g"  {if condition="$goodsItem.goods_unit == 'g'"} selected {/if}>g</option>
                                                 </select>
                                             </div>
                                             <p></p>
@@ -209,7 +223,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">商品描述</label>
                                             <div class="col-sm-10">
-                                                <textarea id="editor" style="height: 400px;width: 800px" name="goods_desc"></textarea>
+                                                <textarea id="editor" style="height: 400px;width: 800px" name="goods_desc">{$goodsItem.goods_desc}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -218,27 +232,25 @@
                                     <!-- 会员价格 开始 -->
                                     <div id="memberprice" class="tab-pane">
                                         {volist name="memberLevelData" id="memberLevel"}
-                                        <!-- 注册会员 -->
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label no-padding-right">{$memberLevel.level_name}</label>
-                                            <div class="col-sm-6">
-                                                <input name="mp[{$memberLevel.id}]" type="text" class="form-control">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right">{$memberLevel.level_name}</label>
+                                                <div class="col-sm-6">
+                                                    <input name="mp[{$memberLevel.id}]" type="text" class="form-control" value="{$memberPriceData[$memberLevel.id]['mprice']}">
+                                                </div>
                                             </div>
-                                        </div>
                                         {/volist}
                                     </div>
                                     <!-- 会员价格 结束 -->
-
 
                                     <!-- 商品属性 开始 -->
                                     <div id="goodsattr" class="tab-pane">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">商品类型</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control price" name="type_id">
+                                                <select class="form-control price" name="type_id" disabled="disabled">
                                                     <option value="">请选择</option>
                                                     {volist name="typeData" id="type"}
-                                                        <option value="{$type.id}">{$type.type_name}</option>
+                                                        <option value="{$type.id}" {if condition="$goodsItem.type_id == $type.id"} selected {/if}>{$type.type_name}</option>
                                                     {/volist}
                                                 </select>
                                             </div>
@@ -246,21 +258,80 @@
 
                                         <div id="attr_list">
                                             <!-- 属性显示  下方js实现 -->
+                                            <?php foreach($attrData as $k => $v):?>
+                                                <?php if($v['attr_type'] == 1):
+                                                    $arrRadio = explode(',',$v['attr_values']);
+                                                ?>
+                                                    <!-- 单选 -->
+                                                    <!-- 循环显示当前商品所拥有的所有的单选属性 -->
+                                                    <?php foreach($goodsAttrData[$v['id']] as $k3 => $v3):?>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right">{$v.attr_name}</label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="abtn" onclick="addrow(this,{$v3.id})"><?php if($k3 == 0){echo '[+]';}else{echo '[-]';};?></a>
+                                                                <select class="form-control price" name="old_goods_attr[{$v.id}][]">
+                                                                    <option value="">请选择</option>
+                                                                    <?php foreach($arrRadio as $k1 => $v1): ?>
+                                                                        <option value="{$v1}"  <?php if($v1 == $v3['attr_value']){echo 'selected';}?> style="display: inline-block">{$v1}</option>
+                                                                    <?php endforeach;?>
+                                                                </select>
+                                                                <input type='text' class='form-control price' placeholder='价格' name='old_attr_price[{$v3.id}]' style='margin-left: 5px' value="{$v3['attr_price']}">
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach;?>
+
+                                            <?php else:?>
+                                                    <!-- 唯一 -->
+                                                    <?php if(!$v['attr_values']):?>
+                                                     <!-- 根据id -->
+                                                      <?php foreach($goodsAttrData[$v['id']] as $k3 => $v3):?>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right">{$v.attr_name}{$v.id}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control price" name="old_goods_attr[{$v.id}][]" value="{$v3['attr_value']}">
+                                                                <input type="hidden" name="old_attr_price[{$v3.id}]" value="0">
+                                                            </div>
+                                                        </div>
+                                                      <?php endforeach;?>
+                                                    <?php else:
+                                                        $arrSelect = explode(',',$v['attr_values']);
+                                                    ?>
+
+                                                    <?php foreach($goodsAttrData[$v['id']] as $k3 => $v3):?>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right">{$v.attr_name}{$v.id}</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="form-control price" name="old_goods_attr[{$v.id}][]">
+                                                                    <option value="">请选择</option>
+                                                                    <?php foreach($arrSelect as $k2 => $v2):?>
+                                                                        <option value="{$v2}" <?php if($v2 == $v3['attr_value']){echo 'selected';};?>>{$v2}</option>
+                                                                    <?php endforeach;?>
+                                                                </select>
+                                                                <input type="hidden" name="old_attr_price[{$v3.id}]" value="0">
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach;?>
+
+                                                    <?php endif;?>
+                                                <?php endif;?>
+                                            <?php endforeach;?>
                                         </div>
                                     </div>
                                     <!-- 商品属性 结束 -->
 
-
                                     <!-- 商品相册 开始 -->
                                     <div id="goodsphoto" class="tab-pane">
                                         <!-- 商品相册 -->
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label no-padding-right">商品相册</label>
-                                            <div class="col-sm-6">
-                                                <a href="#" onclick="addrow(this)">[+]</a>
-                                                <input name="goods_photo[]" type="file" class="form-control" style="border: none;box-shadow: none;width: 250px;display: inline-block">
+                                        {volist name="goodsPhotoData" id="goodsPhoto"}
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right">商品相册</label>
+                                                <div class="col-sm-6">
+                                                    <a href="#" onclick="addRowPhoto(this)"><?php if($key == 0){echo '[+]';}else{echo '[-]';};?></a>
+                                                    <input name="goods_photo[]" type="file" class="form-control" style="border: none;box-shadow: none;width: 250px;display: inline-block">
+                                                    <img src="__UPLOADS__/{$goodsPhoto.sm_photo}" style="height: 40px;">
+                                                </div>
                                             </div>
-                                        </div>
+                                        {/volist}
                                     </div>
                                     <!-- 商品相册 结束 -->
                                 </div>
@@ -294,6 +365,9 @@
     <script src="__ADMIN__/style/jquery.js"></script>
     <!--Beyond Scripts-->
     <script src="__ADMIN__/style/beyond.js"></script>
+    <!--layer-->
+    <script src="__ADMIN__/style/layer.js"></script>
+
     <!-- editor -->
     <script>
         //实例化编辑器
@@ -367,7 +441,63 @@
 
 
         /*  点击 [+] 实现克隆一行数据 */
-        function addrow(obj) {
+        function addrow(obj,id) {
+            var div  = $(obj).parent().parent();
+            if ($(obj).html() == '[+]'){
+                var newdiv = div.clone();//克隆一行
+                newdiv.find('a').html('[-]');//加号[+]变减号[-]
+                //修改old_attr_price[]改为attr_price[]
+                newdiv.find(':text').attr('name','attr_price[]');
+                //修改old_goods_attr[8][]改为goods_attr[8][]
+                var sel = newdiv.find('select');
+                var oldname = sel.attr('name');
+                var newname = oldname.replace('old_','');
+                sel.attr('name',newname);
+                div.after(newdiv);
+            }else{
+                //ajax删除数据
+                //询问框
+                layer.confirm('确定删除该项吗？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.ajax({
+                        //请求方式
+                        type : "get",
+                        //请求的媒体类型
+                        contentType: "json",
+                        //请求地址
+                        url : "{:url('GoodsAttr/ajaxDeleteGoodsAttr')}",
+                        //数据，json字符串
+                        data : {'id':id},
+                        //请求成功
+                        success : function(data) {
+                            if (data.status == 1){
+                                layer.msg(data.message, {
+                                    time: 1000, //3s后自动关闭
+                                });
+                                div.remove();
+                            }
+                            // setTimeout(function(){
+                            //         window.location.reload()
+                            //     }
+                            //     ,1000
+                            // );
+                        },
+                        error:function () {
+                            layer.msg(data.message, {
+                                time: 1000, //3s后自动关闭
+                            });
+                        }
+                    });
+                    layer.close();
+                });
+            }
+        }
+
+
+
+        /*  点击 [+] 实现克隆一行数据 */
+        function addRowPhoto(obj) {
             var div  = $(obj).parent().parent();
             if ($(obj).html() == '[+]'){
                 var newdiv = div.clone();//克隆一行
@@ -378,6 +508,8 @@
                 div.remove();
             }
         }
+
+
     </script>
 
 

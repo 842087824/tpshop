@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商城后台</title>
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <!-- layer -->
+    <link href="__ADMIN__/style/layer.css" rel="stylesheet">
+
+
+    <style>
+        .noshow{
+            width: 48px;
+            background: red;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 2px;
+            line-height: 28px;
+        }
+        .show{
+            width: 48px;
+            background: #3498db;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+<!-- 头部 -->
+{include file="layout/top"}
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        <div class="page-sidebar" id="sidebar">
+            <!-- Page Sidebar Header-->
+            <div class="sidebar-header-wrapper">
+                <input class="searchinput" type="text">
+                <i class="searchicon fa fa-search"></i>
+                <div class="searchhelper">搜索东西</div>
+            </div>
+            <!-- /Page Sidebar Header -->
+            <!-- Sidebar Menu -->
+            {include file="layout/left"}
+            <!-- /Sidebar Menu -->
+        </div>
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('/admin/index')}">系统</a>
+                    </li>
+                    <li class="active">商品库存管理</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <form method="post" action="">
+                            <div class="widget">
+                                <div class="widget-body">
+                                    <div class="flip-scroll">
+                                        <table class="table table-bordered table-hover">
+                                            <thead class="">
+                                            <tr>
+                                                {volist name="radioAttrData" id="radio"}
+                                                    <th class="text-center">{$key}</th>
+                                                {/volist}
+                                                <th class="text-center" width="16%">库存量(件/个)</th>
+                                                <th class="text-center" width="16%">操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            <?php if($goodsProData):
+                                                foreach($goodsProData as $k0 => $v0):
+                                            ?>
+                                            <!-- 判断是否有库存量信息 这里带表有库存量信息-->
+                                                <tr>
+                                                    <?php foreach($radioAttrData as $k => $v):?>
+                                                    <td align="center">
+                                                        <select name="goods_attr[{$k}][]">
+                                                            <option value="">请选择</option>
+                                                            <?php foreach($v as $k1 => $v1):
+                                                                $arr = explode(',',$v0['goods_attr']);
+                                                            ?>
+                                                                <option value="<?php echo $v1['id'];?>" <?php if(in_array($v1['id'],$arr)){echo 'selected';}?>>
+                                                                    <?php echo $v1['attr_value'];?>
+                                                                </option>
+                                                            <?php endforeach;?>
+                                                        </select>
+                                                    </td>
+                                                    <?php endforeach;?>
+
+                                                    <td align="center">
+                                                        <input name="goods_num[]" type="text" class="form-control" style="width: 100px;text-align: center" value="{$v0.goods_number}">
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-azure btn-addon" onclick="addrow(this)">
+                                                            <?php if($k0 == 0){echo '+';}else{echo '-';}?>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; else:?>
+                                            <!-- 判断是否有库存量信息 这里带表无库存量信息-->
+                                                <tr>
+                                                    <?php foreach($radioAttrData as $k => $v):?>
+                                                        <td align="center">
+                                                            <select name="goods_attr[{$k}][]">
+                                                                <option value="">请选择</option>
+                                                                <?php foreach($v as $k1 => $v1):?>
+                                                                    <option value="<?php echo $v1['id'];?>"><?php echo $v1['attr_value'];?></option>
+                                                                <?php endforeach;?>
+                                                            </select>
+                                                        </td>
+                                                    <?php endforeach;?>
+
+                                                    <td align="center">
+                                                        <input name="goods_num[]" type="text" class="form-control" style="width: 100px;text-align: center">
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-azure btn-addon" onclick="addrow(this)">+</a>
+                                                    </td>
+                                                </tr>
+                                            <?php endif;?>
+
+                                        </table>
+                                    </div>
+                                    <div style="margin-top: 10px;height: 30px">
+                                        <input type="button" class="btn btn-blue" style="float: right;margin: 0 10px" value="返回" onclick="window.history.go(-1)"/>
+                                        <input type="submit" class="btn btn-blue" style="float: right" value="更新"/>
+                                        <!-- 排序按钮 -->
+                                        <div style=""></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+<script src="__ADMIN__/style/jquery_002.js"></script>
+<script src="__ADMIN__/style/bootstrap.js"></script>
+<script src="__ADMIN__/style/jquery.js"></script>
+<!--Beyond Scripts-->
+<script src="__ADMIN__/style/beyond.js"></script>
+<!--layer-->
+<script src="__ADMIN__/style/layer.js"></script>
+
+
+<script>
+    <!--ajax删除信息-->
+    function deleteItem(id){
+        //询问框
+        layer.confirm('确定删除该项吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                //请求方式
+                type : "get",
+                //请求的媒体类型
+                contentType: "json",
+                //请求地址
+                url : "{:url('product/delete')}",
+                //数据，json字符串
+                data : {'id':id},
+                //请求成功
+                success : function(data) {
+                    if (data.status == 1){
+                        layer.msg(data.message, {
+                            time: 1000, //3s后自动关闭
+                        });
+                    }
+                    setTimeout(function(){
+                            window.location.reload()}
+                        ,1000
+                    );
+                },
+                error:function () {
+                    layer.msg(data.message, {
+                        time: 1000, //3s后自动关闭
+                    });
+                }
+            });
+            layer.close();
+        });
+    }
+
+
+    /*  点击 [+] 实现克隆一行数据 */
+    function addrow(obj) {
+        var div  = $(obj).parent().parent();
+        if ($(obj).html() == '+'){
+            var newdiv = div.clone();//克隆一行
+            //加号[+]变减号[-]
+            newdiv.find('a').html('-');
+            div.after(newdiv);
+        }else{
+            div.remove();
+        }
+    }
+
+</script>
+
+
+</body></html>

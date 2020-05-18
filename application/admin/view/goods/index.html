@@ -99,6 +99,7 @@
                                                 <th class="text-center">栏目</th>
                                                 <th class="text-center">品牌</th>
                                                 <th class="text-center">类型</th>
+                                                <th class="text-center">库存量</th>
                                                 <th class="text-center">重量</th>
                                                 <th class="text-center">单位</th>
                                                 <th class="text-center" width="18%">操作</th>
@@ -132,10 +133,11 @@
                                                 <td align="center">{$goods.cate_name}</td>
                                                 <td align="center">{$goods.brand_name == '' ? '未设置' : $goods.brand_name}</td>
                                                 <td align="center">{$goods.type_name == '' ? '未设置' : $goods.type_name}</td>
+                                                <td align="center">{$goods.gn == '' ? 0 : $goods.gn}</td>
                                                 <td align="center">{$goods.goods_weight}</td>
                                                 <td align="center">{$goods.goods_unit}</td>
                                                 <td align="center">
-                                                    <a href="{:url('attr/index',['id'=>$goods.id])}" class="btn btn-darkorange btn-sm shiny">
+                                                    <a href="{:url('goods/product',['id'=>$goods.id])}" class="btn btn-darkorange btn-sm shiny">
                                                         <i class="fa fa-list-ul"></i> 库存
                                                     </a>
                                                     <a href="{:url('goods/edit',['id'=>$goods.id])}" class="btn btn-primary btn-sm shiny">

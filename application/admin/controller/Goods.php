@@ -15,10 +15,12 @@ class Goods extends Controller
     public function index(){
        $goodsData = db('goods')
            ->alias('g')
-           ->field('g.*,c.cate_name,t.type_name,b.brand_name')
+           ->field('g.*,c.cate_name,t.type_name,b.brand_name,SUM(p.goods_number) gn')
            ->join('category c','g.category_id = c.id','LEFT')
            ->join('type t','g.type_id = t.id','LEFT')
            ->join('brand b','g.brand_id = b.id','LEFT')
+           ->join('product p','g.id = p.goods_id','LEFT')
+           ->group('g.id')
            ->order('goods_sort','desc')
            ->paginate(10);
        $page = $goodsData->render();
@@ -83,27 +85,16 @@ class Goods extends Controller
         if (request()->isPost()){
             $data = input('post.');
 
+//            dump($data);die;
             //*****进行数据验证*******
-            $validate = validate('goods');
-            if(!$validate->check($data)){
-                $this->error($validate->getError());
-            }
+//            $validate = validate('goods');
+//            if(!$validate->check($data)){
+//                $this->error($validate->getError());
+//            }
 
-            //修改图片时，删除图片
-            if ($_FILES['goods_img']['tmp_name']){
-                //第一步：判断之前数据库是否上传过文件
-                if ($goodsItem['goods_img'] != ''){
-                    //第二步：拼接真实的图片路径
-                    $imgRealPath = UPLOADS_IMG.'/'.$goodsItem['goods_img'];
-                    if (file_exists($imgRealPath)){
-                        @unlink($imgRealPath);
-                    }
-                }
-                //获取路径填充
-                $data['goods_img'] = upload('goods_img');
-            }
+            //模型数据修改商品
+            $re = model('Goods')->update($data);
 
-            $re = db('goods')->update($data);
             if ($re){
                 $this->success('修改成功','index');
             }else{
@@ -111,10 +102,46 @@ class Goods extends Controller
             }
         }
 
+        //1.会员级别
+        $memberLevelData = db('member_level')->select();
+        //2.获取商品类型
+        $typeData = db('type')->field('id,type_name')->select();
+        //3.获取商品所属栏目
+        $categoryData  = db('category')->select();
+        $cate = new Catetree();
+        //3.1 转化数据为无线级分类
+        $categoryTree = $cate->catetree($categoryData);
+        //3.2 再次赋值给categoryData
+        $categoryData = $categoryTree;
+        //4.获取商品所属品牌
+        $brandData = db('brand')->field('id,brand_name')->select();
+        //5.会员价格查询
+        $_memberPriceData = db('member_price')->where('goods_id','=',$id)->select();
+        //5.1 修改会员价格数据显示状态
+        foreach ($_memberPriceData as $k => $v){
+            $memberPriceData[$v['mlevel_id']] = $v;
+        }
+        //6.查询当前商品属性信息
+        $attrData = db('attr')->where('type_id','=',$goodsItem['type_id'])->select();
+        //7.查询当前商品拥有的商品属性
+        $_goodsAttrData = db('goods_attr')->where('goods_id','=',$id)->select();
+        foreach ($_goodsAttrData as $k => $v){
+            $goodsAttrData[$v['attr_id']][] = $v;
+        }
+        //8.查询商品相册
+        $goodsPhotoData = db('goods_photo')->where('goods_id','=',$id)->select();
 
-
+//        dump($goodsPhotoData);die;
         $this->assign([
-            'goodsItem'=>$goodsItem
+            'goodsItem'=>$goodsItem,
+            'memberLevelData'=>$memberLevelData,
+            'typeData'=>$typeData,
+            'categoryData'=>$categoryData,
+            'brandData'=>$brandData,
+            'memberPriceData'=>$memberPriceData,
+            'attrData'=>$attrData,
+            'goodsAttrData'=>$goodsAttrData,
+            'goodsPhotoData'=>$goodsPhotoData
         ]);
         return view('edit');
     }
@@ -134,6 +161,63 @@ class Goods extends Controller
     }
 
 
+    //商品库存
+    public function product(){
+        $id = input('id');
+
+        if (request()->isPost()){
+            //修改的时候 --- 删除原来所有的库存信息
+            db('product')->where('goods_id','=',$id)->delete();
+
+            $data = input('post.');
+            $goodsAttr = $data['goods_attr'];
+            $goodsNum = $data['goods_num'];
+            $product = db('product');
+            //循环goodsNum
+            foreach ($goodsNum as $k => $v){
+                $strArr = array();
+                foreach ($goodsAttr as $k1 => $v1){
+                    //判断单选属性 不可以为空
+                    if (intval($v1[$k]) <= 0){
+                        continue 2;
+                    }
+                    $strArr[] = $v1[$k];
+                }
+                sort($strArr);//排序
+                $strArr = implode(',',$strArr);//把数组转换成一个字符串
+                $product->insert([
+                    'goods_id'=>$id,
+                    'goods_number'=>$v,
+                    'goods_attr'=>$strArr
+                ]);
+            }
+            $this->success('操作成功','index');
+        }
+
+
+        //商品属性
+        $_radioAttrData = db('goods_attr')
+            ->alias('g')
+            ->field('g.id,g.attr_id,g.attr_value,a.attr_name')
+            ->join('attr a','g.attr_id = a.id')
+            ->where(array('g.goods_id'=>$id,'a.attr_type'=>1))
+            ->select();
+        //获取商品库存信息
+        $goodsProData = db('product')->where('goods_id','=',$id)->select();
+
+        //改变数组结构
+        $radioAttrData = array();
+        foreach ($_radioAttrData as $k => $v){
+            $radioAttrData[$v['attr_name']][]=$v;
+        }
+
+        $this->assign([
+            'radioAttrData' => $radioAttrData,
+            'goodsProData' => $goodsProData
+        ]);
+        return view('product');
+    }
+
     //排序
     public function listOrder(){
         //标志位
@@ -152,6 +236,5 @@ class Goods extends Controller
         }else{
             $this->success('排序失败');
         }
-
     }
 }
